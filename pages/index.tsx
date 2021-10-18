@@ -1,15 +1,23 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
-import getStripe from '../utils/get-stripejs'
+import Link from 'next/link';
+import Layout from '../components/Layout';
+import { Data, Service } from '../interfaces';
 
-import CheckoutForm from '../components/CheckoutForm';
+const data: Data = require('../data.json');
 
 const IndexPage = () => {
-return (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <CheckoutForm />
-  </Layout>)
-}
+  const { services } = data;
+  const enabledServices = services.filter(
+    (service: Service) =>
+      service.enabled && Object.keys(service.tiers).length > 0,
+  );
 
-export default IndexPage
+  return (
+    <Layout
+      services={enabledServices}
+      title="Home | Next.js + TypeScript Example">
+      <h1>Hello Next.js 👋</h1>
+    </Layout>
+  );
+};
+
+export default IndexPage;

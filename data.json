@@ -1,0 +1,25 @@
+{
+  "services": [
+    {
+      "enabled": true,
+      "name": "spotify",
+      "maxSlots": 5,
+      "imagePath": "",
+      "tiers": {
+        "1mo": { "priceId": "spotify_1mo", "price": 3.3 },
+        "2mo": { "priceId": "spotify_2mo", "price": 6.4 },
+        "3mo": { "priceId": "spotify_3mo", "price": 9.45 },
+        "4mo": { "priceId": "spotify_4mo", "price": 12.4 },
+        "6mo": { "priceId": "spotify_6mo", "price": 18.25 },
+        "12mo": { "priceId": "spotify_12mo", "price": 36 }
+      }
+    },
+    {
+      "enabled": false,
+      "name": "youtube",
+      "pricePerMonth": "",
+      "imagePath": "",
+      "tiers": {}
+    }
+  ]
+}

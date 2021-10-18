@@ -1,41 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Stripe } from '@stripe/stripe-js';
-import {Elements} from '@stripe/react-stripe-js';
 
+import SubscriptionButton from '../components/SubscriptionButton';
 import StripeTestCards from '../components/StripeTestCards';
 
 import getStripe from '../utils/get-stripejs';
 import { fetchPostJSON } from '../utils/api-helpers';
-import { formatAmountForDisplay } from '../utils/stripe-helpers';
 import * as config from '../config';
+import { Tiers, Tier } from '../interfaces';
 
-import {FREQUENCIES} from '../types'
+type Params = {
+  name: string;
+  tiers: Tiers;
+};
 
-const COSTS = {
-  [FREQUENCIES.MONTHLY]: 10,
-  [FREQUENCIES.SEMIANNUALLY]: 60,
-  [FREQUENCIES.ANNUALLY]: 120
-}
-
-const SERVICE = "SPOTIFY"
-
-const CheckoutForm = () => {
+const CheckoutForm = ({ name = '', tiers = {} }: Params) => {
   const [stripePromise] = useState<Promise<Stripe>>(getStripe());
   const [loading, setLoading] = useState(false);
-  const [frequency, setFrequency] = useState("");
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFrequency(FREQUENCIES[e.currentTarget.value.toUpperCase()]);
-  }
-
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
+  const handleClick = async (amount: number, priceId: string) => {
     setLoading(true);
     // Create a Checkout Session.
     const response = await fetchPostJSON('/api/checkout_sessions', {
-      amount: COSTS[frequency],
-      frequency,
-      service: SERVICE
+      amount,
+      priceId,
     });
 
     if (response.statusCode === 500) {
@@ -57,34 +45,44 @@ const CheckoutForm = () => {
     setLoading(false);
   };
 
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <StripeTestCards />
-      <Elements stripe={stripePromise} />
-      Subscribe:<br />
-      <input type="radio" value={FREQUENCIES.MONTHLY} id={FREQUENCIES.MONTHLY}
-      onChange={handleInputChange} name="frequency" />
-      <label htmlFor={FREQUENCIES.MONTHLY}>{formatAmountForDisplay(COSTS[FREQUENCIES.MONTHLY], config.CURRENCY)} ({FREQUENCIES.MONTHLY})</label>
-      <br />
-      <input type="radio" value={FREQUENCIES.SEMIANNUALLY} id={FREQUENCIES.SEMIANNUALLY}
-      onChange={handleInputChange} name="frequency" />
-      <label htmlFor={FREQUENCIES.SEMIANNUALLY}>{formatAmountForDisplay(COSTS[FREQUENCIES.SEMIANNUALLY], config.CURRENCY)} ({FREQUENCIES.SEMIANNUALLY})</label>
-      <br />
-      <input type="radio" value={FREQUENCIES.ANNUALLY} id={FREQUENCIES.ANNUALLY}
-      onChange={handleInputChange} name="frequency" />
-      <label htmlFor={FREQUENCIES.ANNUALLY}>{formatAmountForDisplay(COSTS[FREQUENCIES.ANNUALLY], config.CURRENCY)} ({FREQUENCIES.ANNUALLY})</label>
-
-      <br />
-      <button
-        className="checkout-style-background"
-        type="submit"
-        disabled={loading || !frequency}
-      >
-        Subscribe for ${COSTS[frequency]}
-      </button>
-    </form>
+  const SubscriptionButtons = Object.entries(tiers).map(
+    ([frequency, { price, priceId }]) => {
+      return (
+        <SubscriptionButton
+          key={priceId}
+          handleClick={() => handleClick(price, priceId)}
+          price={price}
+          frequency={frequency}
+        />
+      );
+    },
   );
+
+  return <>{SubscriptionButtons}</>;
+  // <form onSubmit={handleSubmit}>
+  //   <StripeTestCards />
+  //   <br />
+  //   {SubscriptionButtons}
+  //   <input
+  //     type="radio"
+  //     value={FREQUENCIES.MONTHLY}
+  //     id={FREQUENCIES.MONTHLY}
+  //     onChange={handleInputChange}
+  //     name="frequency"
+  //   />
+  //   <label htmlFor={FREQUENCIES.MONTHLY}>
+  //     {formatAmountForDisplay(COSTS[FREQUENCIES.MONTHLY], config.CURRENCY)} (
+  //     {FREQUENCIES.MONTHLY})
+  //   </label>
+  //   <button
+  //     className="checkout-style-background"
+  //     type="submit"
+  //     disabled={loading || !frequency}>
+  //     Subscribe for ${COSTS[frequency]}
+  //   </button>
+  // </form>
 };
 
 export default CheckoutForm;
+
+const calculateRates = (pricePerMonth: number) => {};
