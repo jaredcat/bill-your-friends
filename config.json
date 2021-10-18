@@ -1,0 +1,24 @@
+{
+  "services": [
+    {
+      "enabled": true,
+      "name": "spotify",
+      "pricePerMonth": "3.30",
+      "imagePath": "",
+      "tiers": {
+        "1mo": "spotify_1mo",
+        "2mo": "spotify_2mo",
+        "4mo": "spotify_4mo",
+        "6mo": "spotify_6mo",
+        "12mo": "spotify_12mo"
+      }
+    },
+    {
+      "enabled": false,
+      "name": "youtube",
+      "pricePerMonth": "",
+      "imagePath": "",
+      "tiers": {}
+    }
+  ]
+}
