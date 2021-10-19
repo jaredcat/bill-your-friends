@@ -1,20 +1,12 @@
-import Link from 'next/link';
 import Layout from '../components/Layout';
-import { Data, Service } from '../interfaces';
+import { useEffect } from 'react';
 
-const data: Data = require('../data.json');
-
-const IndexPage = () => {
-  const { services } = data;
-  const enabledServices = services.filter(
-    (service: Service) =>
-      service.enabled && Object.keys(service.tiers).length > 0,
-  );
-
+const IndexPage = ({ updateTheme }) => {
+  useEffect(() => {
+    updateTheme();
+  }, []);
   return (
-    <Layout
-      services={enabledServices}
-      title="Home | Next.js + TypeScript Example">
+    <Layout title="Home | Next.js + TypeScript Example">
       <h1>Hello Next.js 👋</h1>
     </Layout>
   );

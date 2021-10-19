@@ -4,26 +4,30 @@
 //
 // import { User } from 'path/to/interfaces';
 
+export type Theme = {
+  backgroundColor?: string;
+  fontColor?: string;
+};
+
 export type Data = {
-  services: Array<Service>
-}
+  services: Array<Service>;
+};
 
 export type Service = {
-  enabled: boolean
-  name: string
-  maxSlots: number
-  imagePath: string
-  tiers: Tiers
-}
+  enabled: boolean;
+  name: string;
+  color?: string;
+  maxSlots: number;
+  imagePath: string;
+  tiers: Tiers;
+  updateTheme?: Function;
+};
 
 export type Tiers = {
-  "1mo"?: Tier
-  "2mo"?: Tier
-  "4mo"?: Tier
-  "6mo"?: Tier
-  "12mo"?: Tier
-}
+  [key: string]: Tier;
+};
+
 export type Tier = {
-  "priceId": string
-  "price": number
-}
+  priceId: string;
+  price: number;
+};
