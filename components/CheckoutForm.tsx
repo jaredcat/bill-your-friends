@@ -6,30 +6,37 @@ import StripeTestCards from '../components/StripeTestCards';
 
 import getStripe from '../utils/get-stripejs';
 import { fetchPostJSON } from '../utils/api-helpers';
-import * as config from '../config';
 import { Tiers, Tier } from '../interfaces';
+import styled from '@emotion/styled';
 
 type Params = {
-  name: string;
+  slug: string;
+  service: string;
   tiers: Tiers;
 };
 
-const CheckoutForm = ({ name = '', tiers = {} }: Params) => {
+const SubscribeWrapper = styled.div`
+  display: flex;
+`;
+
+const CheckoutForm = ({ service = '', slug = '', tiers = {} }: Params) => {
   const [stripePromise] = useState<Promise<Stripe>>(getStripe());
   const [loading, setLoading] = useState(false);
 
-  const handleClick = async (amount: number, priceId: string) => {
+  const handleSubmit = async (priceId: string) => {
     setLoading(true);
     // Create a Checkout Session.
-    const response = await fetchPostJSON('/api/checkout_sessions', {
-      amount,
+    const response = await fetchPostJSON('/api/create-checkout-session', {
       priceId,
+      service,
+      slug,
     });
 
     if (response.statusCode === 500) {
       console.error(response.message);
       return;
     }
+
     const stripe = await stripePromise;
     // Redirect to Checkout.
     const { error } = await stripe!.redirectToCheckout({
@@ -50,37 +57,19 @@ const CheckoutForm = ({ name = '', tiers = {} }: Params) => {
       return (
         <SubscriptionButton
           key={priceId}
-          handleClick={() => handleClick(price, priceId)}
+          handleClick={() => handleSubmit(priceId)}
           price={price}
           frequency={frequency}
+          loading={loading}
         />
       );
     },
   );
 
-  return <>{SubscriptionButtons}</>;
+  return <SubscribeWrapper>{SubscriptionButtons}</SubscribeWrapper>;
   // <form onSubmit={handleSubmit}>
-  //   <StripeTestCards />
-  //   <br />
-  //   {SubscriptionButtons}
-  //   <input
-  //     type="radio"
-  //     value={FREQUENCIES.MONTHLY}
-  //     id={FREQUENCIES.MONTHLY}
-  //     onChange={handleInputChange}
-  //     name="frequency"
-  //   />
-  //   <label htmlFor={FREQUENCIES.MONTHLY}>
-  //     {formatAmountForDisplay(COSTS[FREQUENCIES.MONTHLY], config.CURRENCY)} (
-  //     {FREQUENCIES.MONTHLY})
-  //   </label>
-  //   <button
-  //     className="checkout-style-background"
-  //     type="submit"
-  //     disabled={loading || !frequency}>
-  //     Subscribe for ${COSTS[frequency]}
-  //   </button>
-  // </form>
+
+  // </form>;
 };
 
 export default CheckoutForm;

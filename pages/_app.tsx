@@ -19,7 +19,6 @@ function App({ Component, pageProps }: AppProps) {
       setTheme(initThemeState);
     }
     setTheme((prevTheme) => {
-      console.log(prevTheme, newTheme);
       return { ...prevTheme, ...newTheme };
     });
   };

@@ -7,13 +7,16 @@ import { getEnabledServices } from '../utils/get-enabled-services';
 import { useEffect } from 'react';
 
 const ServicePage = (props: Service) => {
-  console.log(props);
   const { name, tiers, color, updateTheme } = props;
   useEffect(() => updateTheme({ backgroundColor: color }), [color]);
   return (
     <Layout title={`${name} | Next.js + TypeScript Example`}>
       <h1>{name}</h1>
-      <CheckoutForm name={name} tiers={tiers} />
+      <CheckoutForm
+        service={name}
+        slug={encodeURIComponent(name.toLowerCase())}
+        tiers={tiers}
+      />
     </Layout>
   );
 };
