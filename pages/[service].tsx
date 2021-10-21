@@ -5,18 +5,19 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { Data, Service } from '../interfaces';
 import { getEnabledServices } from '../utils/get-enabled-services';
 import { useEffect } from 'react';
+import loadData from '../utils/load-data';
 
-const ServicePage = (props: Service) => {
-  const { name, tiers, color, updateTheme } = props;
+type Props = Service & {
+  slug: string;
+};
+
+const ServicePage = (props: Props) => {
+  const { name, tiers, color, updateTheme, slug } = props;
   useEffect(() => updateTheme({ backgroundColor: color }), [color]);
   return (
     <Layout title={`${name} | Next.js + TypeScript Example`}>
       <h1>{name}</h1>
-      <CheckoutForm
-        service={name}
-        slug={encodeURIComponent(name.toLowerCase())}
-        tiers={tiers}
-      />
+      <CheckoutForm service={name} slug={slug} tiers={tiers} />
     </Layout>
   );
 };
@@ -25,11 +26,12 @@ export default ServicePage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
-  const data: Data = require('../data.json');
+  const data: Data = loadData();
+
   const service: Service = data.services.find(
-    (service) =>
-      encodeURIComponent(service.name.toLowerCase()) === params.service,
+    ({ slug }) => slug === params.service,
   );
+
   return {
     props: {
       ...service,
@@ -37,15 +39,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
   };
 };
 
-export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const enabledServices = getEnabledServices();
-  const slugs = enabledServices.map((enabledService) => enabledService.slug);
 
-  const newPaths = [];
   // Add params to every slug obj returned from api
-  for (let slug of slugs) {
-    newPaths.push({ params: { service: slug } });
-  }
+  const newPaths = enabledServices.map(({ slug }) => {
+    return { params: { service: slug } };
+  });
 
   return {
     paths: newPaths, //indicates that no page needs be created at build time

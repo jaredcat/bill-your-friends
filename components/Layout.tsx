@@ -26,22 +26,17 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => {
             <a>Home</a>
           </Link>
           {enabledServices.length > 0
-            ? enabledServices.map(
-                (enabledService: {
-                  slug: string;
-                  name: string;
-                }): JSX.Element => {
-                  return (
-                    <React.Fragment key={enabledService.slug}>
-                      {' '}
-                      |{' '}
-                      <Link href={`/${enabledService.slug}`}>
-                        <a>{enabledService.name}</a>
-                      </Link>
-                    </React.Fragment>
-                  );
-                },
-              )
+            ? enabledServices.map(({ name, slug }): JSX.Element => {
+                return (
+                  <React.Fragment key={slug}>
+                    {' '}
+                    |{' '}
+                    <Link href={`/${slug}`}>
+                      <a>{name}</a>
+                    </Link>
+                  </React.Fragment>
+                );
+              })
             : null}
         </nav>
       </header>

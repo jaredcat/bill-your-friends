@@ -16,6 +16,7 @@ export type Data = {
 export type Service = {
   enabled: boolean;
   name: string;
+  slug: string;
   color?: string;
   maxSlots: number;
   imagePath: string;

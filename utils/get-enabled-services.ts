@@ -1,20 +1,12 @@
 import { Data, Service } from '../interfaces';
+import loadData from './load-data';
 
-const data: Data = require('../data.json');
+const data: Data = loadData();
 const { services } = data;
 
-export function getEnabledServices(): { slug: string; name: string }[] {
-  const enabledServices: { slug: string; name: string }[] = services.reduce(
-    (acc, service: Service) => {
-      if (service.enabled && Object.values(service.tiers).length > 0) {
-        acc.push({
-          slug: encodeURIComponent(service.name.toLowerCase()),
-          name: service.name,
-        });
-      }
-      return acc;
-    },
-    [],
+export function getEnabledServices(): Service[] {
+  const enabledServices: Service[] = services.filter(
+    ({ enabled, tiers }) => enabled && Object.values(tiers).length > 0,
   );
 
   return enabledServices;
