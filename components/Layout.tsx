@@ -13,6 +13,31 @@ type Props = {
 const enabledServices = getEnabledServices();
 
 const Layout = ({ children, title = 'This is the default title' }: Props) => {
+  let ServiceLinks: JSX.Element[] = [];
+  if (enabledServices.length > 0) {
+    ServiceLinks = [
+      <React.Fragment key="fixed">
+        <br />
+        <span>Offered Subscriptions: </span>
+      </React.Fragment>,
+    ];
+    const separator = <> | </>;
+    for (let i = 0; i < enabledServices.length; i++) {
+      const { slug, isSlotsLeft } = enabledServices[i];
+      let name = <>{enabledServices[i].name}</>;
+      if (!isSlotsLeft) name = <s>{name}</s>;
+      console.log(name, isSlotsLeft);
+      ServiceLinks.push(
+        <React.Fragment key={slug}>
+          <Link href={`/${slug}`}>
+            <a>{name}</a>
+          </Link>
+          {separator}
+        </React.Fragment>,
+      );
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -25,19 +50,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => {
           <Link href="/">
             <a>Home</a>
           </Link>
-          {enabledServices.length > 0
-            ? enabledServices.map(({ name, slug }): JSX.Element => {
-                return (
-                  <React.Fragment key={slug}>
-                    {' '}
-                    |{' '}
-                    <Link href={`/${slug}`}>
-                      <a>{name}</a>
-                    </Link>
-                  </React.Fragment>
-                );
-              })
-            : null}
+          {ServiceLinks}
         </nav>
       </header>
       {children}

@@ -3,7 +3,8 @@
     {
       "enabled": true,
       "name": "Spotify",
-      "maxSlots": 5,
+      "slotsMax": 5,
+      "slotsUsed": 5,
       "imagePath": "",
       "color": "#1db954",
       "tiers": {
@@ -18,7 +19,8 @@
     {
       "enabled": true,
       "name": "YouTube",
-      "maxSlots": 5,
+      "slotsMax": 5,
+      "slotsUsed": 1,
       "imagePath": "",
       "color": "#ff0000",
       "tiers": {

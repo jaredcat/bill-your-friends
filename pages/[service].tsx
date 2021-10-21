@@ -1,4 +1,5 @@
 import Layout from '../components/Layout';
+import { useRouter } from 'next/router';
 
 import CheckoutForm from '../components/CheckoutForm';
 import { GetStaticPaths, GetStaticProps } from 'next';
@@ -13,7 +14,12 @@ type Props = Service & {
 
 const ServicePage = (props: Props) => {
   const { name, tiers, color, updateTheme, slug } = props;
+  const router = useRouter();
+  const canceled: boolean = router.query.canceled === 'true';
+  const success: boolean = router.query.success === 'true';
+
   useEffect(() => updateTheme({ backgroundColor: color }), [color]);
+
   return (
     <Layout title={`${name} | Next.js + TypeScript Example`}>
       <h1>{name}</h1>
@@ -26,15 +32,16 @@ export default ServicePage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
+  const { service } = params;
   const data: Data = loadData();
 
-  const service: Service = data.services.find(
-    ({ slug }) => slug === params.service,
+  const currentService: Service = data.services.find(
+    ({ slug }) => slug === service,
   );
 
   return {
     props: {
-      ...service,
+      ...currentService,
     }, // will be passed to the page component as props
   };
 };

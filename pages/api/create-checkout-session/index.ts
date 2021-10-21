@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { CURRENCY } from '../../../config';
-
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // https://github.com/stripe/stripe-node#configuration
@@ -34,7 +32,6 @@ export default async function handler(
         cancel_url: `${req.headers.origin}/${slug}?canceled=true`,
       };
 
-      console.log(req.headers);
       const checkoutSession: Stripe.Checkout.Session =
         await stripe.checkout.sessions.create(params);
 

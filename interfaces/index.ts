@@ -18,7 +18,10 @@ export type Service = {
   name: string;
   slug: string;
   color?: string;
-  maxSlots: number;
+  slotsMax: number;
+  slotsUsed: number;
+  slotsLeft: number;
+  isSlotsLeft: boolean;
   imagePath: string;
   tiers: Tiers;
   updateTheme?: Function;

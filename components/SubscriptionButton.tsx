@@ -1,3 +1,4 @@
+import { MouseEventHandler } from 'react';
 import { formatAmountForDisplay } from '../utils/stripe-helpers';
 import * as config from '../config';
 
@@ -6,7 +7,7 @@ import styled from '@emotion/styled';
 type Props = {
   price: number;
   frequency: string;
-  handleClick: Function;
+  handleClick: MouseEventHandler<HTMLButtonElement>;
   loading: boolean;
 };
 
@@ -15,6 +16,8 @@ const Button = styled.button`
   background: white;
   margin: 10px;
   cursor: pointer;
+  flex: 1 0 calc(33.33% - 20px);
+  width: 50px;
   transition: all 0.1s ease;
   border-radius: 6px;
   border-style: unset;

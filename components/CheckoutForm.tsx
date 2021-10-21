@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Stripe } from '@stripe/stripe-js';
 
 import SubscriptionButton from '../components/SubscriptionButton';
@@ -17,6 +17,7 @@ type Params = {
 
 const SubscribeWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const CheckoutForm = ({ service = '', slug = '', tiers = {} }: Params) => {
