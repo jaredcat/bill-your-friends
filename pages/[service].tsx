@@ -5,8 +5,9 @@ import CheckoutForm from '../components/CheckoutForm';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { Data, Service } from '../interfaces';
 import { getEnabledServices } from '../utils/get-enabled-services';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import loadData from '../utils/load-data';
+import Popup from '../components/Popup';
 
 type Props = Service & {
   slug: string;
@@ -24,6 +25,19 @@ const ServicePage = (props: Props) => {
     <Layout title={`${name} | Next.js + TypeScript Example`}>
       <h1>{name}</h1>
       <CheckoutForm service={name} slug={slug} tiers={tiers} />
+      {success && !canceled ? (
+        <Popup header="Success!" subtitle="Manage Subscription">
+          <form action="/customer-portal" method="POST">
+            <button type="submit">Manage Billing</button>
+            <button>Close</button>
+          </form>
+        </Popup>
+      ) : null}
+      {canceled ? (
+        <Popup header="Canceled" subtitle="Your card was not charged">
+          <button>Close</button>
+        </Popup>
+      ) : null}
     </Layout>
   );
 };
@@ -56,6 +70,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: newPaths, //indicates that no page needs be created at build time
-    fallback: 'blocking', //indicates the type of fallback
+    fallback: false, //indicates the type of fallback
   };
 };
