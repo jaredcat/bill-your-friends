@@ -1,14 +1,14 @@
 // import App from "next/app";
-import type { AppProps /*, AppContext */ } from 'next/app';
-import { useState } from 'react';
-import { Global, ThemeProvider, css } from '@emotion/react';
-import styled from '@emotion/styled';
-import { themeTypes } from '../types';
-import { Theme } from '../interfaces';
+import type { AppProps /*, AppContext */ } from "next/app";
+import { useState } from "react";
+import { Global, ThemeProvider, css } from "@emotion/react";
+import styled from "@emotion/styled";
+import { themeTypes } from "../types";
+import { Theme } from "../interfaces";
 
 const initThemeState: Theme = {
-  fontColor: '#FFFFFF',
-  backgroundColor: '#85bb65',
+  fontColor: "#FFFFFF",
+  backgroundColor: "#85bb65",
 };
 
 function App({ Component, pageProps }: AppProps) {

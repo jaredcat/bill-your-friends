@@ -1,26 +1,34 @@
-import React, { ReactNode } from 'react';
-import Link from 'next/link';
-import Head from 'next/head';
-import { Service } from '../interfaces';
+import React, { ReactNode } from "react";
+import Link from "next/link";
+import Head from "next/head";
+import { Service } from "../interfaces";
+import { jsx } from "@emotion/react";
 
-import { getEnabledServices } from '../utils/get-enabled-services';
+import { getEnabledServices } from "../utils/get-enabled-services";
 
 type Props = {
   children?: ReactNode;
   title: string;
   backgroundColor?: string;
+  isBlur?: boolean;
 };
 
 const enabledServices = getEnabledServices();
 
-const Layout = ({ children, title }: Props) => {
+const Layout = ({ children, title, isBlur = false }: Props) => {
   let ServiceLinks: JSX.Element[] = [];
   if (enabledServices.length > 0) {
     ServiceLinks = generateHeaderLinks(enabledServices);
   }
 
   return (
-    <div>
+    <div
+      css={{
+        transition: "all 0.3s",
+        filter: isBlur ? "blur(3px)" : "blur(0px)",
+        pointerEvents: isBlur ? "none" : "initial",
+      }}
+    >
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
@@ -62,7 +70,7 @@ const generateHeaderLinks = (enabledServices: Service[]): JSX.Element[] => {
           <a>{name}</a>
         </Link>
         {i !== enabledServices.length - 1 ? separator : null}
-      </React.Fragment>,
+      </React.Fragment>
     );
   }
   return links;

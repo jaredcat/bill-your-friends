@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 const Container = styled.div`
   background-color: #fff;
@@ -6,6 +6,7 @@ const Container = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  box-sizing: border-box;
   border-radius: 25px;
   max-width: 500px;
   min-width: 250px;
@@ -13,6 +14,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 15px;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
 `;
 
 type Props = {

@@ -1,5 +1,5 @@
-import Layout from '../components/Layout';
-import { useEffect } from 'react';
+import Layout from "../components/Layout";
+import { useEffect } from "react";
 
 const IndexPage = ({ updateTheme }) => {
   useEffect(() => {
