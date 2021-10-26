@@ -8,7 +8,7 @@ export function formatAmountForDisplay(
   amount: number,
   currency: string
 ): string {
-  let numberFormat = new Intl.NumberFormat(["en-US"], {
+  const numberFormat = new Intl.NumberFormat(["en-US"], {
     style: "currency",
     currency: currency,
     currencyDisplay: "symbol",
@@ -20,14 +20,14 @@ export function formatAmountForStripe(
   amount: number,
   currency: string
 ): number {
-  let numberFormat = new Intl.NumberFormat(["en-US"], {
+  const numberFormat = new Intl.NumberFormat(["en-US"], {
     style: "currency",
     currency: currency,
     currencyDisplay: "symbol",
   });
   const parts = numberFormat.formatToParts(amount);
-  let zeroDecimalCurrency: boolean = true;
-  for (let part of parts) {
+  let zeroDecimalCurrency = true;
+  for (const part of parts) {
     if (part.type === "decimal") {
       zeroDecimalCurrency = false;
     }
@@ -60,13 +60,14 @@ export async function checkout(
     return;
   }
 
-  if (response.customer) {
-    const newCustomerId: any = response.customer;
+  if (response.customer && typeof response.customer === "string") {
+    const newCustomerId: string = response.customer;
     window.localStorage.setItem(`${slug}-customer-id`, newCustomerId);
   }
 
   const stripe = await getStripe();
   // Redirect to Checkout.
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { error } = await stripe!.redirectToCheckout({
     // Make the id field from the Checkout Session creation API response
     // available to this file, so you can provide it as parameter here

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import Stripe from "stripe";
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // https://github.com/stripe/stripe-node#configuration
   apiVersion: "2020-08-27",

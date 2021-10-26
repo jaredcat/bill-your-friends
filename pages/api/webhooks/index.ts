@@ -3,11 +3,13 @@ import Cors from "micro-cors";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import Stripe from "stripe";
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // https://github.com/stripe/stripe-node#configuration
   apiVersion: "2020-08-27",
 });
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!;
 
 // Stripe requires the raw body to construct the event.
@@ -24,6 +26,7 @@ const cors = Cors({
 const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const buf = await buffer(req);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const sig = req.headers["stripe-signature"]!;
 
     let event: Stripe.Event;
@@ -68,4 +71,4 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default cors(webhookHandler as any);
+export default cors(webhookHandler as never);
