@@ -1,6 +1,7 @@
 import { Data, Service } from "../interfaces";
 
 const loadData = (): Data => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const data: Data = require("../data.json");
 
   const servicesWithSlugs = data.services.map((service: Service) => {

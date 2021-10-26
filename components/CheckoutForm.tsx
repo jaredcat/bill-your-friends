@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Stripe } from "@stripe/stripe-js";
-
 import SubscriptionButton from "../components/SubscriptionButton";
 // import StripeTestCards from '../components/StripeTestCards';
 
@@ -14,7 +12,7 @@ type Params = {
   tiers: Tiers;
   isSlotsLeft: boolean;
   customerId?: string;
-  setPopupIsOpen: Function;
+  setPopupIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SubscribeWrapper = styled.div`

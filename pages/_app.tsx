@@ -2,8 +2,6 @@
 import type { AppProps /*, AppContext */ } from "next/app";
 import { useState } from "react";
 import { Global, ThemeProvider, css } from "@emotion/react";
-import styled from "@emotion/styled";
-import { themeTypes } from "../types";
 import { Theme } from "../interfaces";
 
 const initThemeState: Theme = {
@@ -14,7 +12,7 @@ const initThemeState: Theme = {
 function App({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = useState(initThemeState);
 
-  const updateTheme = (newTheme: Theme) => {
+  const updateTheme = (newTheme: Theme): void => {
     if (!newTheme || Object.entries(newTheme).length === 0) {
       setTheme(initThemeState);
     }

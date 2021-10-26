@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextApiResponse } from "next";
 import { useRouter } from "next/router";
-import { jsx } from "@emotion/react";
 import { Stripe as StripeNode } from "stripe";
 
 import { fetchPostJSON } from "../utils/api-helpers";
@@ -37,8 +36,11 @@ const ServicePage = (props: Props) => {
   useEffect(() => {
     const customerId = window.localStorage.getItem(`${slug}-customer-id`);
     if (customerId && customerId !== "null") setCustomerId(customerId);
-  }, []);
-  useEffect(() => updateTheme({ backgroundColor: color }), [color]);
+  }, [slug]);
+  useEffect(
+    () => updateTheme({ backgroundColor: color }),
+    [color, updateTheme]
+  );
   useEffect(() => setPopupIsOpen(success || canceled), [success, canceled]);
 
   const closePopup = (): void => {
@@ -101,7 +103,7 @@ const generatePopup = (
   popupIsOpen: boolean,
   success: boolean,
   canceled: boolean,
-  handleClickManageBilling: Function,
+  handleClickManageBilling: (customerId: string, sessionId: string) => void,
   closePopup: React.MouseEventHandler,
   sessionId?: string,
   customerId?: string

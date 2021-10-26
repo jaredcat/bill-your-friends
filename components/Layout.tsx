@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { Service } from "../interfaces";
-import { jsx } from "@emotion/react";
 
 import { getEnabledServices } from "../utils/get-enabled-services";
 
