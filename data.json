@@ -1,0 +1,72 @@
+{
+  "services": [
+    {
+      "enabled": true,
+      "name": "Spotify",
+      "slotsMax": 5,
+      "slotsUsed": 4,
+      "imagePath": "",
+      "color": "#1db954",
+      "tiers": {
+        "month": {
+          "priceId": "spotify_1mo",
+          "price": 3.3
+        },
+        "2 months": {
+          "priceId": "price_1Jogad2Po0bW1Iu6mKajaEWM",
+          "price": 6.4
+        },
+        "3 months": {
+          "priceId": "spotify_3mo",
+          "price": 9.45
+        },
+        "4 months": {
+          "priceId": "spotify_4mo",
+          "price": 12.4
+        },
+        "6 months": {
+          "priceId": "spotify_6mo",
+          "price": 18.25
+        },
+        "12 months": {
+          "priceId": "spotify_12mo",
+          "price": 36
+        }
+      }
+    },
+    {
+      "enabled": true,
+      "name": "YouTube",
+      "slotsMax": 5,
+      "slotsUsed": 1,
+      "imagePath": "",
+      "color": "#ff0000",
+      "tiers": {
+        "month": {
+          "priceId": "youtube_1mo",
+          "price": 4
+        },
+        "2 months": {
+          "priceId": "youtube_2mo",
+          "price": 8
+        },
+        "3 months": {
+          "priceId": "youtube_3mo",
+          "price": 12
+        },
+        "4 months": {
+          "priceId": "youtube_4mo",
+          "price": 16
+        },
+        "6 months": {
+          "priceId": "youtube_6mo",
+          "price": 24
+        },
+        "12 months": {
+          "priceId": "youtube_12mo",
+          "price": 48
+        }
+      }
+    }
+  ]
+}

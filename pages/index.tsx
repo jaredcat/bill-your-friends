@@ -1,15 +1,15 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
-import getStripe from '../utils/get-stripejs'
+import Layout from "../components/Layout";
+import { useEffect } from "react";
 
-import CheckoutForm from '../components/CheckoutForm';
+const IndexPage = ({ updateTheme }) => {
+  useEffect(() => {
+    updateTheme();
+  }, [updateTheme]);
+  return (
+    <Layout title="Home | Next.js + TypeScript Example">
+      <h1>Hello Next.js 👋</h1>
+    </Layout>
+  );
+};
 
-const IndexPage = () => {
-return (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <CheckoutForm />
-  </Layout>)
-}
-
-export default IndexPage
+export default IndexPage;

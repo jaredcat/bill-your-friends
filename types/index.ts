@@ -1,6 +1,3 @@
-
-export const FREQUENCIES = {
-  MONTHLY: 'monthly',
-  SEMIANNUALLY: 'semiannually',
-  ANNUALLY: 'annually'
+export const themeTypes = {
+  COLORS: "COLORS",
 };

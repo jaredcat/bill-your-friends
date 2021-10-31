@@ -4,7 +4,34 @@
 //
 // import { User } from 'path/to/interfaces';
 
-export type User = {
-  id: number
-  name: string
-}
+export type Theme = {
+  backgroundColor?: string;
+  fontColor?: string;
+};
+
+export type Data = {
+  services: Array<Service>;
+};
+
+export type Service = {
+  enabled: boolean;
+  name: string;
+  slug: string;
+  color?: string;
+  slotsMax: number;
+  slotsUsed: number;
+  slotsLeft: number;
+  isSlotsLeft: boolean;
+  imagePath: string;
+  tiers: Tiers;
+  updateTheme?: (newTheme: Theme) => void;
+};
+
+export type Tiers = {
+  [key: string]: Tier;
+};
+
+export type Tier = {
+  priceId: string;
+  price: number;
+};
