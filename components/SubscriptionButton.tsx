@@ -1,14 +1,14 @@
-import { MouseEventHandler } from 'react';
-import { formatAmountForDisplay } from '../utils/stripe-helpers';
-import * as config from '../config';
+import { MouseEventHandler } from "react";
+import { formatAmountForDisplay } from "../utils/stripe-helpers";
+import * as config from "../config";
 
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 type Props = {
   price: number;
   frequency: string;
   handleClick: MouseEventHandler<HTMLButtonElement>;
-  loading: boolean;
+  disabled: boolean;
 };
 
 const Button = styled.button`
@@ -21,7 +21,7 @@ const Button = styled.button`
   transition: all 0.1s ease;
   border-radius: 6px;
   border-style: unset;
-  &:hover {
+  &:hover:enabled {
     filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.5));
   }
 `;
@@ -30,11 +30,11 @@ const SubscriptionButton = ({
   price,
   frequency,
   handleClick,
-  loading = false,
+  disabled = false,
 }: Props) => {
   return (
-    <Button type="submit" onClick={handleClick} disabled={loading}>
-      Subscribe at {formatAmountForDisplay(price, config.CURRENCY)} every{' '}
+    <Button type="submit" onClick={handleClick} disabled={disabled}>
+      Subscribe at {formatAmountForDisplay(price, config.CURRENCY)} every{" "}
       {frequency}
     </Button>
   );

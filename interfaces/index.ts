@@ -24,7 +24,7 @@ export type Service = {
   isSlotsLeft: boolean;
   imagePath: string;
   tiers: Tiers;
-  updateTheme?: Function;
+  updateTheme?: (newTheme: Theme) => void;
 };
 
 export type Tiers = {

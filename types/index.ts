@@ -1,3 +1,3 @@
 export const themeTypes = {
-  COLORS: 'COLORS',
+  COLORS: "COLORS",
 };
