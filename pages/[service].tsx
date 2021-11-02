@@ -10,6 +10,7 @@ import { Data, Service } from "../interfaces";
 import { getEnabledServices } from "../utils/get-enabled-services";
 import loadData from "../utils/load-data";
 import Popup from "../components/Popup";
+import ManageSubscriptionsButton from "../components/ManageSubscriptionsButton";
 
 type Props = Service & {
   slug: string;
@@ -37,20 +38,11 @@ const ServicePage = (props: Props) => {
     const customerId = window.localStorage.getItem(`${slug}-customer-id`);
     if (customerId && customerId !== "null") setCustomerId(customerId);
   }, [slug]);
-  useEffect(
-    () => updateTheme({ backgroundColor: color }),
-    [color, updateTheme]
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => updateTheme({ backgroundColor: color }), [color]);
   useEffect(() => setPopupIsOpen(success || canceled), [success, canceled]);
 
-  const closePopup = (): void => {
-    setPopupIsOpen(false);
-  };
-
-  const handleClickManageBilling = async (
-    customerId: string,
-    sessionId: string
-  ): Promise<void> => {
+  const handleClickManageBilling = async (): Promise<void> => {
     // Create a Checkout Session.
     const response: APIResponse = await fetchPostJSON(
       "/api/create-customer-portal-session",
@@ -69,19 +61,14 @@ const ServicePage = (props: Props) => {
     }
   };
 
-  const popup = generatePopup(
-    popupIsOpen,
-    success,
-    canceled,
-    handleClickManageBilling,
-    closePopup,
-    sessionId,
-    customerId
-  );
-
   return (
     <>
       <Layout title={`${name} | Next.js + TypeScript Example`} isBlur={isBlur}>
+        <ManageSubscriptionsButton
+          customerId={customerId}
+          handleClickManageBilling={handleClickManageBilling}
+          setPopupIsOpen={setPopupIsOpen}
+        />
         <h1>{name}</h1>
         <CheckoutForm
           serviceName={name}
@@ -92,80 +79,20 @@ const ServicePage = (props: Props) => {
           setPopupIsOpen={setPopupIsOpen}
         />
       </Layout>
-      {popup}
+      <Popup
+        customerId={customerId}
+        success={success}
+        canceled={canceled}
+        handleClickManageBilling={handleClickManageBilling}
+        popupIsOpen={popupIsOpen}
+        setPopupIsOpen={setPopupIsOpen}
+        slug={slug}
+      />
     </>
   );
 };
 
 export default ServicePage;
-
-const generatePopup = (
-  popupIsOpen: boolean,
-  success: boolean,
-  canceled: boolean,
-  handleClickManageBilling: (customerId: string, sessionId: string) => void,
-  closePopup: React.MouseEventHandler,
-  sessionId?: string,
-  customerId?: string
-) => {
-  if (!popupIsOpen) return null;
-  const state = {
-    SUCCESS: success && !canceled,
-    SUBSCRIBER_CANCELED: canceled && customerId,
-    CANCELLED: canceled,
-    SUBSCRIBER: !!customerId,
-  };
-  if (state.SUCCESS) {
-    return (
-      <Popup header="Success!" subtitle="Manage Subscription">
-        <>
-          {customerId ? (
-            <button
-              onClick={() => handleClickManageBilling(customerId, sessionId)}
-            >
-              Manage Billing
-            </button>
-          ) : null}
-          <button onClick={closePopup}>Close</button>
-        </>
-      </Popup>
-    );
-  } else if (state.SUBSCRIBER_CANCELED) {
-    return (
-      <Popup header="Canceled" subtitle="Your subscription was not changed">
-        <>
-          <button
-            onClick={() => handleClickManageBilling(customerId, sessionId)}
-          >
-            Manage Billing
-          </button>
-          <button onClick={closePopup}>Close</button>
-        </>
-      </Popup>
-    );
-  } else if (state.CANCELLED) {
-    return (
-      <Popup header="Canceled" subtitle="Your card was not charged">
-        <button onClick={closePopup}>Close</button>
-      </Popup>
-    );
-  } else if (state.SUBSCRIBER) {
-    return (
-      <Popup
-        header="Already a subscriber"
-        subtitle="You're currently a subscriber would you like to: "
-      >
-        <>
-          <button onClick={closePopup}>Manage subscription</button>
-          <button onClick={closePopup}>Add another subscription</button>
-          <br />
-          <button onClick={closePopup}>Close</button>
-        </>
-      </Popup>
-    );
-  }
-  return null;
-};
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;

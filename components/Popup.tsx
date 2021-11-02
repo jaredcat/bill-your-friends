@@ -1,4 +1,7 @@
+import React from "react";
 import styled from "@emotion/styled";
+import { NextApiResponse } from "next";
+import { fetchPostJSON } from "../utils/api-helpers";
 
 const Container = styled.div`
   background-color: #fff;
@@ -19,12 +22,122 @@ const Container = styled.div`
 `;
 
 type Props = {
-  header: string;
-  subtitle: string;
-  children: JSX.Element;
+  popupIsOpen: boolean;
+  setPopupIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  success: boolean;
+  canceled: boolean;
+  customerId: string;
+  handleClickManageBilling: () => Promise<void>;
+  slug: string;
 };
 
-const Popup = ({ header, subtitle, children }: Props) => {
+type APIResponse = NextApiResponse & {
+  message: string;
+  statusCode: number;
+};
+
+const Popup = ({
+  popupIsOpen = false,
+  setPopupIsOpen,
+  success = false,
+  canceled = false,
+  customerId = "",
+  handleClickManageBilling,
+  slug = "/",
+}: Props) => {
+  let header = "";
+  let subtitle = "";
+  let children: JSX.Element = null;
+
+  const handleEmailLookup = async (event) => {
+    event.preventDefault();
+    const response: APIResponse = await fetchPostJSON(
+      "/api/subscription-lookup",
+      {
+        email: event.target.emailLookup.value,
+        slug,
+      }
+    );
+
+    if (response.statusCode !== 200) {
+      console.error(response.statusCode, response.message);
+    } else {
+      console.log(response.statusCode, response.message);
+      setPopupIsOpen(false);
+    }
+  };
+
+  const handleClose = () => {
+    setPopupIsOpen(false);
+  };
+
+  if (!popupIsOpen) return null;
+  const state = {
+    SUCCESS: success && !canceled,
+    SUBSCRIBER_CANCELED: canceled && !!customerId,
+    CANCELLED: canceled,
+    SUBSCRIBER: !!customerId,
+    UNKNOWN_MANAGE: true,
+  };
+  if (state.SUCCESS) {
+    header = "Success!";
+    subtitle = "Manage Subscription";
+    children = (
+      <>
+        {customerId ? (
+          <button onClick={handleClickManageBilling}>Manage Billing</button>
+        ) : null}
+        <button onClick={handleClose}>Close</button>
+      </>
+    );
+  } else if (state.SUBSCRIBER_CANCELED) {
+    header = "Canceled";
+    subtitle = "Your subscription was not changed";
+    children = (
+      <>
+        <button onClick={handleClickManageBilling}>Manage Billing</button>
+        <button onClick={handleClose}>Close</button>
+      </>
+    );
+  } else if (state.CANCELLED) {
+    header = "Canceled";
+    subtitle = "Your card was not charged";
+    children = <button onClick={handleClose}>Close</button>;
+  } else if (state.SUBSCRIBER) {
+    header = "Already a subscriber";
+    subtitle = "You're currently a subscriber would you like to: ";
+    children = (
+      <>
+        <button onClick={handleClickManageBilling}>Manage subscription</button>
+        <button onClick={handleClose}>Add another subscription</button>
+        <br />
+        <button onClick={handleClose}>Close</button>
+      </>
+    );
+  } else if (state.UNKNOWN_MANAGE) {
+    header = "Look up your subscription";
+    subtitle = "Type your email that you used to subscribe: ";
+    children = (
+      <>
+        <form onSubmit={handleEmailLookup}>
+          <label htmlFor="emailLookup">Email: </label>
+          <input
+            id="emailLookup"
+            name="emailLookup"
+            type="email"
+            autoComplete="email"
+            placeholder="Enter your email"
+            required
+          ></input>
+          <button type="submit">Submit</button>
+        </form>
+        <button onClick={handleClose}>Add another subscription</button>
+        <br />
+        <button onClick={handleClose}>Close</button>
+      </>
+    );
+  }
+
   return (
     <Container>
       <h2>{header}</h2>
